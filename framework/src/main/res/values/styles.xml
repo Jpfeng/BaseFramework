@@ -1,0 +1,9 @@
+<resources>
+    <!-- AATextView 默认属性 -->
+    <style name="DefaultAATextViewStyle">
+        <item name="aatv_anti_alias">true</item>
+        <item name="aatv_underline">false</item>
+        <item name="android:textColor">#FF98A9C0</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+</resources>

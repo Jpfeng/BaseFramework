@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">BaseFramework</string>
+
+    <string name="net_error_timeout">Connection timeout</string>
+    <string name="net_error_network">Network error</string>
+    <string name="net_error_http" translatable="false">Http %d: %s</string>
+    <string name="net_error_json_parse">Data parse error</string>
+    <string name="net_error_api">Error %d: %s</string>
+    <string name="net_error_unknown">Unknown error</string>
+</resources>

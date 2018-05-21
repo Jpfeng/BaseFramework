@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- AATextView xml 属性 -->
+    <declare-styleable name="AATextView">
+        <!-- 是否有下划线 -->
+        <attr name="aatv_underline" format="boolean" />
+        <!-- 是否开启抗锯齿 -->
+        <attr name="aatv_anti_alias" format="boolean" />
+    </declare-styleable>
+    <attr name="AATextViewStyle" format="reference" />
+</resources>
