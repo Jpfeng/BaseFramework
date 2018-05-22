@@ -10,7 +10,7 @@ import java.lang.ref.WeakReference;
  * E-mail: fengjp@mixotc.com
  * Date: 2018/5/8
  */
-public abstract class BaseApplication extends Application {
+public class BaseApplication extends Application {
 
     private static WeakReference<Context> mContext;
 
@@ -18,7 +18,6 @@ public abstract class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mContext = new WeakReference<>(getApplicationContext());
-        init();
     }
 
     /**
@@ -29,9 +28,4 @@ public abstract class BaseApplication extends Application {
     public static Context getContext() {
         return mContext.get();
     }
-
-    /**
-     * 对 Application 进行初始化
-     */
-    public abstract void init();
 }

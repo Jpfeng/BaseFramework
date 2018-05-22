@@ -58,21 +58,21 @@ public abstract class BaseModel<S> {
      * @param dataConverter 将数据进行转换的方法。运行在 IO 线程
      * @param callback      结果的回调。运行在主线程
      * @param resolver      错误异常的解析类。如果为空，则返回 Throwable#getMessage()
-     * @param <Response>    通用服务器返回类型的泛型
-     * @param <Data>        从服务器返回中提取数据的泛型
-     * @param <Result>      最终结果的泛型
+     * @param <P>           通用服务器返回类型的泛型
+     * @param <D>           从服务器返回中提取数据的泛型
+     * @param <R>           最终结果的泛型
      * @return 网络请求的订阅
      */
-    protected <Response, Data, Result> ResourceSubscriber<Result> request(@NonNull Flowable<Response> request,
-                                                                          @NonNull FlowableTransformer<Response, Data> dataGetter,
-                                                                          @NonNull Function<Data, Result> dataConverter,
-                                                                          @NonNull IModelCallBack<Result> callback,
-                                                                          @Nullable ErrorResolver resolver) {
+    protected <P, D, R> ResourceSubscriber<R> request(@NonNull Flowable<P> request,
+                                                      @NonNull FlowableTransformer<P, D> dataGetter,
+                                                      @NonNull Function<D, R> dataConverter,
+                                                      @NonNull IModelCallback<R> callback,
+                                                      @Nullable ErrorResolver resolver) {
         return request.subscribeOn(Schedulers.io())
                 .compose(dataGetter)
                 .map(dataConverter)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new ResourceSubscriber<Result>() {
+                .subscribeWith(new ResourceSubscriber<R>() {
                     @Override
                     protected void onStart() {
                         super.onStart();
@@ -80,7 +80,7 @@ public abstract class BaseModel<S> {
                     }
 
                     @Override
-                    public void onNext(Result r) {
+                    public void onNext(R r) {
                         callback.onSuccess(r);
                     }
 

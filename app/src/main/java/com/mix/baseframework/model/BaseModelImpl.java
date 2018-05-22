@@ -3,7 +3,7 @@ package com.mix.baseframework.model;
 import com.mix.baseframework.net.BaseErrorResolver;
 import com.mix.baseframework.net.NetResponse;
 import com.mix.framework.data.model.BaseModel;
-import com.mix.framework.data.model.IModelCallBack;
+import com.mix.framework.data.model.IModelCallback;
 import com.mix.framework.data.net.util.ApiException;
 
 import io.reactivex.BackpressureStrategy;
@@ -20,13 +20,13 @@ import io.reactivex.subscribers.ResourceSubscriber;
 public abstract class BaseModelImpl<S> extends BaseModel<S> {
 
     protected <T> ResourceSubscriber<T> request(Flowable<NetResponse<T>> request,
-                                                IModelCallBack<T> callback) {
+                                                IModelCallback<T> callback) {
         return request(request, data -> data, callback);
     }
 
     protected <T, R> ResourceSubscriber<R> request(Flowable<NetResponse<T>> request,
                                                    Function<T, R> converter,
-                                                   IModelCallBack<R> callback) {
+                                                   IModelCallback<R> callback) {
         return request(request, convertResult(), converter, callback, new BaseErrorResolver());
     }
 

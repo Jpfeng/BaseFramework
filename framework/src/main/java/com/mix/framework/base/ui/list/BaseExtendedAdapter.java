@@ -65,7 +65,7 @@ public abstract class BaseExtendedAdapter<T> extends BaseListAdapter<T> {
                         .inflate(R.layout.item_extended_loading_more, parent, false));
             default:
                 // 其他处理具体由子类实现
-                return onCreateViewHolderCompact(parent, viewType);
+                return onCreateViewHolderCompat(parent, viewType);
         }
     }
 
@@ -74,7 +74,7 @@ public abstract class BaseExtendedAdapter<T> extends BaseListAdapter<T> {
         if (isHeader(position) || isLoadingMoreView(position)) {
             onBindViewHolder(holder, position);
         } else {
-            onBindViewHolderCompact(holder, getDataPosition(position), payloads);
+            onBindViewHolderCompat(holder, getDataPosition(position), payloads);
         }
     }
 
@@ -115,7 +115,7 @@ public abstract class BaseExtendedAdapter<T> extends BaseListAdapter<T> {
             }
         } else {
             // 其他处理具体由子类实现
-            onBindViewHolderCompact(holder, getDataPosition(position));
+            onBindViewHolderCompat(holder, getDataPosition(position));
         }
     }
 
@@ -138,7 +138,7 @@ public abstract class BaseExtendedAdapter<T> extends BaseListAdapter<T> {
             return TYPE_LOAD_MORE_VIEW;
         } else {
             // 其余情况为数据条目，先判断返回值是否重复，重复则抛出异常。
-            int type = getItemViewTypeCompact(getDataPosition(position));
+            int type = getItemViewTypeCompat(getDataPosition(position));
             if (TYPE_HEADER == type || TYPE_LOAD_MORE_VIEW == type) {
                 throw new IllegalArgumentException("you CAN NOT use 198 or 199 for item view type! try another int!");
             }
@@ -152,7 +152,7 @@ public abstract class BaseExtendedAdapter<T> extends BaseListAdapter<T> {
      * @param parent   父类视图
      * @param viewType 条目类型
      */
-    public abstract ViewHolder onCreateViewHolderCompact(@NonNull ViewGroup parent, int viewType);
+    public abstract ViewHolder onCreateViewHolderCompat(@NonNull ViewGroup parent, int viewType);
 
     /**
      * 替代 onBindViewHolder，此方法仅会处理数据条目（非头部和加载更多视图）。
@@ -160,7 +160,7 @@ public abstract class BaseExtendedAdapter<T> extends BaseListAdapter<T> {
      * @param holder       viewHolder
      * @param dataPosition 条目在数据集中的位置
      */
-    public abstract void onBindViewHolderCompact(@NonNull ViewHolder holder, int dataPosition);
+    public abstract void onBindViewHolderCompat(@NonNull ViewHolder holder, int dataPosition);
 
     /**
      * 替代 onBindViewHolder
@@ -169,8 +169,8 @@ public abstract class BaseExtendedAdapter<T> extends BaseListAdapter<T> {
      * @param dataPosition 条目在数据集中的位置
      * @param payloads     payload
      */
-    public void onBindViewHolderCompact(@NonNull ViewHolder holder, int dataPosition, @NonNull List payloads) {
-        onBindViewHolderCompact(holder, dataPosition);
+    public void onBindViewHolderCompat(@NonNull ViewHolder holder, int dataPosition, @NonNull List payloads) {
+        onBindViewHolderCompat(holder, dataPosition);
     }
 
     /**
@@ -179,7 +179,7 @@ public abstract class BaseExtendedAdapter<T> extends BaseListAdapter<T> {
      * @param dataPosition 条目在数据集中的位置
      * @return 类型
      */
-    public int getItemViewTypeCompact(int dataPosition) {
+    public int getItemViewTypeCompat(int dataPosition) {
         return 0;
     }
 

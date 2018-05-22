@@ -3,7 +3,7 @@ package com.mix.baseframework.model;
 import android.support.annotation.NonNull;
 
 import com.mix.baseframework.net.DemoApi;
-import com.mix.framework.data.model.IModelCallBack;
+import com.mix.framework.data.model.IModelCallback;
 
 import io.reactivex.subscribers.ResourceSubscriber;
 
@@ -19,7 +19,7 @@ public class DemoModel extends BaseModelImpl<DemoApi> {
         return DemoApi.class;
     }
 
-    public ResourceSubscriber<String> getTips(IModelCallBack<String> callback) {
+    public ResourceSubscriber<String> getTips(IModelCallback<String> callback) {
         // 网络请求模板
         return request(mService.getSearchTips(), callback);
     }

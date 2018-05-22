@@ -30,4 +30,9 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter {
         }
         notifyDataSetChanged();
     }
+
+    @Override
+    public int getItemCount() {
+        return null == mData ? 0 : mData.size();
+    }
 }

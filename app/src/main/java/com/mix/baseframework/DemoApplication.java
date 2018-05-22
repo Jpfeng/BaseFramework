@@ -12,7 +12,8 @@ import com.mix.framework.data.net.util.NetConfig;
 public class DemoApplication extends BaseApplication {
 
     @Override
-    public void init() {
+    public void onCreate() {
+        super.onCreate();
         NetConfig config = new NetConfig("http://127.0.0.1/");
         NetClient.init(config);
     }

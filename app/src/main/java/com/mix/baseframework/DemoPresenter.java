@@ -1,9 +1,8 @@
 package com.mix.baseframework;
 
 import com.mix.baseframework.model.DemoModel;
-import com.mix.framework.data.model.BaseModel;
 import com.mix.framework.base.mvp.BasePresenter;
-import com.mix.framework.data.model.IModelCallBack;
+import com.mix.framework.data.model.IModelCallback;
 import com.mix.framework.data.model.ModelManager;
 import com.mix.framework.data.net.NetClient;
 import com.mix.framework.data.net.util.NetConfig;
@@ -22,7 +21,7 @@ public class DemoPresenter extends BasePresenter<DemoContract.View> implements D
     }
 
     private void loadData() {
-        ModelManager.get(DemoModel.class).getTips(new IModelCallBack<String>() {
+        ModelManager.get(DemoModel.class).getTips(new IModelCallback<String>() {
             @Override
             public void onStart() {
                 mView.showPageLoading();

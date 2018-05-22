@@ -5,7 +5,7 @@ package com.mix.framework.data.model;
  * E-mail: fengjp@mixotc.com
  * Date: 2018/5/8
  */
-public interface IModelCallBack<T> {
+public interface IModelCallback<T> {
     /**
      * 请求开始。
      * 可在此处进行显示加载中等操作。
