@@ -1,19 +1,26 @@
 package com.mix.framework.base.ui.list;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.Px;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.mix.framework.R;
+import com.mix.framework.base.BaseApplication;
 import com.mix.framework.base.ui.BaseListAdapter;
-import com.mix.framework.util.StringUtils;
+import com.mix.framework.util.UIUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,30 +32,51 @@ import java.util.List;
  */
 public abstract class BaseExtendedAdapter<T> extends BaseListAdapter<T> {
 
-    private static final int TYPE_HEADER = 199;
-    private static final int TYPE_LOAD_MORE_VIEW = 198;
+    private static final int DEFAULT_START_REFRESH_HEIGHT = UIUtils.dp2px(48);
 
-    private static final int STATE_NORMAL = 0;
-    private static final int STATE_LOADING = 1;
-    private static final int STATE_ERROR = 2;
-    private static final int STATE_NO_MORE = 3;
+    private static final int TYPE_HEADER = 199;
+    private static final int TYPE_FOOTER = 198;
+    private static final int TYPE_REFRESH_VIEW = 197;
+    private static final int TYPE_LOAD_MORE_VIEW = 196;
+
+    private static final int STATE_LOAD_MORE_NORMAL = 0;
+    private static final int STATE_LOAD_MORE_LOADING = 1;
+    private static final int STATE_LOAD_MORE_ERROR = 2;
+    private static final int STATE_LOAD_MORE_NO_MORE = 3;
 
     private List<View> mHeaders;
-    private RecyclerView mRecyclerView;
+    private List<View> mFooters;
+    private RefreshView mRefreshView;
+    private LoadMoreView mLoadMoreView;
 
     private OnScrollListener mScrollListener;
     private OnLoadMoreListener mLoadMoreListener;
+    private OnRefreshListener mRefreshListener;
 
+    private boolean mRefreshEnable;
     private boolean mLoadMoreEnable;
-    private boolean mNeedAddScrollListenerToRecyclerView;
+    private boolean mIsRefreshing;
+    private int mLoadMoreState;
+    private boolean mIsAnimating;
 
-    private int mLoadingMoreState;
+    private boolean mIsTop;
+    private int mScrollOffset;
+    private float mPullStartY;
+    private boolean mPullToRefresh;
+    private int mStartRefreshHeight;
 
     public BaseExtendedAdapter() {
         mHeaders = new ArrayList<>();
+        mFooters = new ArrayList<>();
+        mRefreshEnable = false;
         mLoadMoreEnable = false;
-        mNeedAddScrollListenerToRecyclerView = false;
-        mLoadingMoreState = STATE_NORMAL;
+        mIsRefreshing = false;
+        mLoadMoreState = STATE_LOAD_MORE_NORMAL;
+        mIsAnimating = false;
+        mIsTop = true;
+        mScrollOffset = 0;
+        mPullStartY = -1f;
+        mPullToRefresh = false;
     }
 
     @NonNull
@@ -56,13 +84,11 @@ public abstract class BaseExtendedAdapter<T> extends BaseListAdapter<T> {
     public final ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch (viewType) {
             case TYPE_HEADER:
-                // 处理头部
-                return new HeaderViewHolder(LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_extended_header, parent, false));
+            case TYPE_FOOTER:
+            case TYPE_REFRESH_VIEW:
             case TYPE_LOAD_MORE_VIEW:
-                // 处理加载更多
-                return new LoadingMoreViewHolder(LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_extended_loading_more, parent, false));
+                return new HeaderFooterViewHolder(LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_extended_header_footer, parent, false));
             default:
                 // 其他处理具体由子类实现
                 return onCreateViewHolderCompat(parent, viewType);
@@ -71,7 +97,8 @@ public abstract class BaseExtendedAdapter<T> extends BaseListAdapter<T> {
 
     @Override
     public final void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull List payloads) {
-        if (isHeader(position) || isLoadingMoreView(position)) {
+        if (isRefreshingView(position) || isHeader(position)
+                || isFooter(position) || isLoadingMoreView(position)) {
             onBindViewHolder(holder, position);
         } else {
             onBindViewHolderCompat(holder, getDataPosition(position), payloads);
@@ -80,37 +107,26 @@ public abstract class BaseExtendedAdapter<T> extends BaseListAdapter<T> {
 
     @Override
     public final void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        if (holder instanceof HeaderViewHolder) {
-            // 处理头部
-            final HeaderViewHolder vh = (HeaderViewHolder) holder;
-            vh.mFlRoot.addView(mHeaders.get(position));
-        } else if (holder instanceof LoadingMoreViewHolder) {
-            // 处理加载更多
-            final LoadingMoreViewHolder vh = (LoadingMoreViewHolder) holder;
-            switch (mLoadingMoreState) {
-                case STATE_NORMAL:
-                default:
-                    vh.mLlRoot.setOnClickListener(null);
-                    vh.mPbProgress.setVisibility(View.GONE);
-                    vh.mTvHint.setText(StringUtils.getString(R.string.loading_more));
+        if (holder instanceof HeaderFooterViewHolder) {
+            final HeaderFooterViewHolder vh = (HeaderFooterViewHolder) holder;
+            switch (getItemViewType(position)) {
+                case TYPE_HEADER:
+                    // 处理头部
+                    vh.mFlRoot.addView(mHeaders.get(getHeaderPosition(position)));
                     break;
-
-                case STATE_LOADING:
-                    vh.mLlRoot.setOnClickListener(null);
-                    vh.mPbProgress.setVisibility(View.VISIBLE);
-                    vh.mTvHint.setText(StringUtils.getString(R.string.loading_more_loading));
+                case TYPE_FOOTER:
+                    // 处理尾部
+                    vh.mFlRoot.addView(mFooters.get(getFooterPosition(position)));
                     break;
-
-                case STATE_ERROR:
-                    vh.mLlRoot.setOnClickListener(v -> loadMore());
-                    vh.mPbProgress.setVisibility(View.GONE);
-                    vh.mTvHint.setText(StringUtils.getString(R.string.loading_more_error));
+                case TYPE_REFRESH_VIEW:
+                    vh.mFlRoot.addView(mRefreshView);
+                    // 如果不是刷新中或动画中，将高度设置为 0
+                    if (!mIsRefreshing && !mIsAnimating) {
+                        mRefreshView.getLayoutParams().height = 0;
+                    }
                     break;
-
-                case STATE_NO_MORE:
-                    vh.mLlRoot.setOnClickListener(null);
-                    vh.mPbProgress.setVisibility(View.GONE);
-                    vh.mTvHint.setText(StringUtils.getString(R.string.loading_more_end));
+                case TYPE_LOAD_MORE_VIEW:
+                    vh.mFlRoot.addView(mLoadMoreView);
                     break;
             }
         } else {
@@ -121,26 +137,28 @@ public abstract class BaseExtendedAdapter<T> extends BaseListAdapter<T> {
 
     @Override
     public void onViewRecycled(@NonNull ViewHolder holder) {
-        if (holder instanceof HeaderViewHolder) {
-            // 头部在被回收后要从父控件中移除，复用时才不会出现问题。
-            final HeaderViewHolder vh = (HeaderViewHolder) holder;
+        if (holder instanceof HeaderFooterViewHolder) {
+            // 视图在被回收后要从父控件中移除，复用时才不会出现问题。
+            final HeaderFooterViewHolder vh = (HeaderFooterViewHolder) holder;
             vh.mFlRoot.removeAllViews();
         }
     }
 
     @Override
     public final int getItemViewType(int position) {
-        if (isHeader(position)) {
-            // 如果是 header ，返回 TYPE_HEADER
+        if (isRefreshingView(position)) {
+            return TYPE_REFRESH_VIEW;
+        } else if (isHeader(position)) {
             return TYPE_HEADER;
+        } else if (isFooter(position)) {
+            return TYPE_FOOTER;
         } else if (isLoadingMoreView(position)) {
-            // 如果是加载更多，返回 TYPE_LOAD_MORE_VIEW
             return TYPE_LOAD_MORE_VIEW;
         } else {
             // 其余情况为数据条目，先判断返回值是否重复，重复则抛出异常。
             int type = getItemViewTypeCompat(getDataPosition(position));
-            if (TYPE_HEADER == type || TYPE_LOAD_MORE_VIEW == type) {
-                throw new IllegalArgumentException("you CAN NOT use 198 or 199 for item view type! try another int!");
+            if (TYPE_HEADER >= type && TYPE_LOAD_MORE_VIEW <= type) {
+                throw new IllegalArgumentException("you CAN NOT use 196 - 199 for item view type! try another int!");
             }
             return type;
         }
@@ -174,7 +192,7 @@ public abstract class BaseExtendedAdapter<T> extends BaseListAdapter<T> {
     }
 
     /**
-     * 返回条目类型，仅限数据条目（非头部和加载更多视图）。不可用 198 或 199 作为返回值，会抛出异常。
+     * 返回条目类型，仅限数据条目（非头部和加载更多视图）。不可用 196 至 199 作为返回值，会抛出异常。
      *
      * @param dataPosition 条目在数据集中的位置
      * @return 类型
@@ -185,10 +203,22 @@ public abstract class BaseExtendedAdapter<T> extends BaseListAdapter<T> {
 
     @Override
     public final int getItemCount() {
+        int refreshViewCount = mRefreshEnable ? 1 : 0;
         int headerCount = mHeaders.size();
         int contentCount = mData.size();
-        int footerCount = mLoadMoreEnable ? 1 : 0;
-        return headerCount + contentCount + footerCount;
+        int footerCount = mFooters.size();
+        int loadingViewCount = mLoadMoreEnable ? 1 : 0;
+        return refreshViewCount + headerCount + contentCount + footerCount + loadingViewCount;
+    }
+
+    /**
+     * 输入一个位置，判断是否为刷新视图。
+     *
+     * @param position 条目在整体列表中的位置
+     * @return true 是刷新视图
+     */
+    public boolean isRefreshingView(int position) {
+        return mRefreshEnable && 0 == position;
     }
 
     /**
@@ -198,7 +228,26 @@ public abstract class BaseExtendedAdapter<T> extends BaseListAdapter<T> {
      * @return true 是头部视图
      */
     public boolean isHeader(int position) {
-        return position < mHeaders.size();
+        if (mRefreshEnable) {
+            return position < mHeaders.size() + 1 && 0 != position;
+        } else {
+            return position < mHeaders.size();
+        }
+    }
+
+    /**
+     * 输入一个位置，判断是否为尾部视图。
+     *
+     * @param position 条目在整体列表中的位置
+     * @return true 是尾部视图
+     */
+    public boolean isFooter(int position) {
+        final int itemCount = getItemCount();
+        if (mLoadMoreEnable) {
+            return itemCount - 2 - position < mFooters.size() && itemCount - 1 != position;
+        } else {
+            return itemCount - 1 - position < mFooters.size();
+        }
     }
 
     /**
@@ -208,31 +257,154 @@ public abstract class BaseExtendedAdapter<T> extends BaseListAdapter<T> {
      * @return true 是加载更多视图
      */
     public boolean isLoadingMoreView(int position) {
-        return mLoadMoreEnable && position == getItemCount() - 1;
+        return mLoadMoreEnable && getItemCount() - 1 == position;
+    }
+
+    private int getHeaderPosition(int position) {
+        return isHeader(position)
+                ? position - (mRefreshEnable ? 1 : 0)
+                : -1;
+    }
+
+    private int getFooterPosition(int position) {
+        return isFooter(position)
+                ? position - (mRefreshEnable ? 1 : 0) - mHeaders.size() - mData.size()
+                : -1;
     }
 
     private int getDataPosition(int position) {
-        if (isHeader(position) || isLoadingMoreView(position)) {
+        if (isRefreshingView(position) || isHeader(position)
+                || isFooter(position) || isLoadingMoreView(position)) {
             return -1;
         }
-        return position - mHeaders.size();
+        return position - mHeaders.size() - (mRefreshEnable ? 1 : 0);
     }
 
     @Override
+    @SuppressLint("ClickableViewAccessibility")
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
-        mRecyclerView = recyclerView;
-        if (mNeedAddScrollListenerToRecyclerView) {
-            mRecyclerView.addOnScrollListener(mScrollListener);
-        }
+        mScrollListener = new OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (mLoadMoreEnable) {
+                    int lastVisibleItemPosition = findLastVisibleItemPosition(recyclerView.getLayoutManager());
+                    if (lastVisibleItemPosition == getItemCount() - 1 && STATE_LOAD_MORE_NORMAL == mLoadMoreState) {
+                        loadMore();
+                    }
+                }
+                // 记录当前的滑动距离
+                mScrollOffset += dy;
+                if (mScrollOffset < 0) {
+                    mScrollOffset = 0;
+                }
+                mIsTop = 0 == mScrollOffset;
+            }
+        };
+        recyclerView.addOnScrollListener(mScrollListener);
+        recyclerView.setOnTouchListener((v, event) -> {
+            if (!mRefreshEnable || mIsRefreshing || mIsAnimating) {
+                // 如果未开启下拉刷新，或正在刷新，或正在进行动画，就不做处理
+                return false;
+            }
+            boolean handled = false;
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                case MotionEvent.ACTION_MOVE:
+                    // -1f == mPullStartY 表示当前没有记录开始下拉的位置，不需要处理下拉刷新
+                    if (mIsTop && -1f == mPullStartY) {
+                        // 如果在列表顶部了但是还未开始处理下拉刷新，则开始记录位置
+                        mPullStartY = event.getY();
+                    } else if (!mIsTop && -1f != mPullStartY) {
+                        // 如果不在顶部了，清除开始下拉的位置
+                        mPullStartY = -1f;
+                    }
+                    // 计算下拉的高度。如果没有记录开始下拉的位置，那高度就是 0
+                    int height = (int) (-1 == mPullStartY ? 0 : event.getY() - mPullStartY) / 3;
+                    if (!mPullToRefresh) {
+                        // 如果当前不是下拉刷新状态，则判断是否开启下拉刷新。如果下拉的高度大于 0
+                        mPullToRefresh = height > 0;
+                    }
+                    if (mPullToRefresh) {
+                        // 处理下拉刷新
+                        if (height >= 0) {
+                            // 有下拉高度时，将下拉刷新视图高度进行调整
+                            mRefreshView.getLayoutParams().height = height;
+                            if (height >= mStartRefreshHeight) {
+                                mRefreshView.pulling(1);
+                            } else {
+                                mRefreshView.pulling((float) height / mStartRefreshHeight);
+                            }
+                        } else {
+                            // 如果下拉高度变为负数，则停止下拉刷新
+                            mRefreshView.getLayoutParams().height = 0;
+                            mRefreshView.pulling(0);
+                            mPullToRefresh = false;
+                        }
+                        mRefreshView.requestLayout();
+                        // 将返回值置为 true ，可以拦截列表自身的触摸事件处理
+                        handled = true;
+                    }
+                    break;
+                case MotionEvent.ACTION_UP:
+                    if (mPullToRefresh) {
+                        // 如果还在下拉状态中。。
+                        height = mRefreshView.getLayoutParams().height;
+                        if (height >= mStartRefreshHeight) {
+                            startRefreshViewAnimation(height, mStartRefreshHeight, true);
+                        } else {
+                            startRefreshViewAnimation(height, 0, false);
+                        }
+                        mPullStartY = -1;
+                        mPullToRefresh = false;
+                        handled = true;
+                    }
+                    break;
+            }
+            return handled;
+        });
     }
 
     @Override
     public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onDetachedFromRecyclerView(recyclerView);
-        if (recyclerView == mRecyclerView) {
-            mRecyclerView = null;
-        }
+        // 移除注册的监听器
+        recyclerView.removeOnScrollListener(mScrollListener);
+    }
+
+    private void startRefreshViewAnimation(int startHeight, int targetHeight, boolean callRefresh) {
+        ValueAnimator animator = ValueAnimator.ofInt(startHeight, targetHeight);
+        animator.addUpdateListener(animation -> {
+            mRefreshView.getLayoutParams().height = (int) (Integer) animation.getAnimatedValue();
+            mRefreshView.requestLayout();
+        });
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                mIsAnimating = true;
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                mIsAnimating = false;
+                if (callRefresh) {
+                    mIsRefreshing = true;
+                    mRefreshView.startRefresh();
+                    if (null != mRefreshListener) {
+                        mRefreshListener.onRefresh();
+                    }
+                }
+            }
+        });
+        animator.start();
     }
 
     /**
@@ -242,7 +414,7 @@ public abstract class BaseExtendedAdapter<T> extends BaseListAdapter<T> {
      */
     @Override
     public void setNewData(@Nullable List<T> newData) {
-        mLoadingMoreState = STATE_NORMAL;
+        mLoadMoreState = STATE_LOAD_MORE_NORMAL;
         super.setNewData(newData);
     }
 
@@ -253,7 +425,7 @@ public abstract class BaseExtendedAdapter<T> extends BaseListAdapter<T> {
      */
     public void addData(@Nullable List<T> data) {
         if (null != data) {
-            int start = mHeaders.size() + mData.size();
+            int start = mHeaders.size() + mData.size() + (mRefreshEnable ? 1 : 0);
             mData.addAll(data);
             notifyItemRangeInserted(start, data.size());
         }
@@ -269,7 +441,7 @@ public abstract class BaseExtendedAdapter<T> extends BaseListAdapter<T> {
             return;
         }
         mHeaders.add(0, headerView);
-        notifyItemInserted(0);
+        notifyItemInserted(mRefreshEnable ? 1 : 0);
     }
 
     /**
@@ -284,7 +456,37 @@ public abstract class BaseExtendedAdapter<T> extends BaseListAdapter<T> {
         int index = mHeaders.indexOf(headerView);
         if (0 < index) {
             mHeaders.remove(headerView);
-            notifyItemRemoved(index);
+            notifyItemRemoved(index + (mRefreshEnable ? 1 : 0));
+        }
+    }
+
+    /**
+     * 添加 Footer 。添加位置为当前列表的最底部。
+     *
+     * @param footerView 要添加的 View
+     */
+    public void addFooter(@Nullable View footerView) {
+        if (null == footerView) {
+            return;
+        }
+        mFooters.add(footerView);
+        notifyItemInserted(getItemCount() - (mLoadMoreEnable ? 2 : 1));
+    }
+
+    /**
+     * 移除指定的 Footer
+     *
+     * @param footerView 要移除的 View
+     */
+    public void removeFooter(@Nullable View footerView) {
+        if (null == footerView) {
+            return;
+        }
+        int index = mFooters.indexOf(footerView);
+        if (0 < index) {
+            mFooters.remove(footerView);
+            notifyItemRemoved(
+                    getItemCount() - (mLoadMoreEnable ? 1 : 0) - (mFooters.size() - index));
         }
     }
 
@@ -294,51 +496,65 @@ public abstract class BaseExtendedAdapter<T> extends BaseListAdapter<T> {
      * @param loadMore true 为启用
      */
     public void setLoadMoreEnable(boolean loadMore) {
-        mLoadingMoreState = STATE_NORMAL;
-        if (loadMore) {
-            mLoadMoreEnable = true;
-            mScrollListener = new OnScrollListener() {
-                @Override
-                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                    super.onScrollStateChanged(recyclerView, newState);
-                    int lastVisibleItemPosition = findLastVisibleItemPosition(recyclerView.getLayoutManager());
-                    if (RecyclerView.SCROLL_STATE_IDLE == newState &&
-                            lastVisibleItemPosition == getItemCount() - 1 &&
-                            STATE_NORMAL == mLoadingMoreState) {
-                        loadMore();
-                    }
-                }
-
-                @Override
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-//                    int lastVisibleItemPosition = findLastVisibleItemPosition(recyclerView.getLayoutManager());
-//                    if (lastVisibleItemPosition == getItemCount() - 1 && STATE_NORMAL == mLoadingMoreState) {
-//                        loadMore();
-//                    }
-                }
-            };
-
-            // 如果当前有 mRecyclerView 的实例，则设置滑动监听。否则设置标记延迟设置。
-            if (null != mRecyclerView) {
-                mRecyclerView.addOnScrollListener(mScrollListener);
-            } else {
-                mNeedAddScrollListenerToRecyclerView = true;
+        mLoadMoreState = STATE_LOAD_MORE_NORMAL;
+        mLoadMoreEnable = loadMore;
+        if (mLoadMoreEnable) {
+            if (null == mLoadMoreView) {
+                setLoadMoreView(new DefaultLoadMoreView(BaseApplication.getContext()));
             }
         } else {
-            mLoadMoreEnable = false;
-            if (null != mRecyclerView) {
-                mRecyclerView.removeOnScrollListener(mScrollListener);
-                mScrollListener = null;
-            }
+            mLoadMoreView = null;
         }
+    }
+
+    /**
+     * 设置自定义的加载更多视图。加载后默认显示普通状态。
+     *
+     * @param view 加载更多视图
+     */
+    public void setLoadMoreView(@NonNull LoadMoreView view) {
+        mLoadMoreView = view;
+        mLoadMoreView.setOnClickListener((v) -> {
+            if (STATE_LOAD_MORE_ERROR == mLoadMoreState) {
+                loadMore();
+            }
+        });
+        mLoadMoreView.showNormal();
+    }
+
+    /**
+     * 启用下拉刷新
+     *
+     * @param refresh true 为启用
+     */
+    public void setRefreshEnable(boolean refresh) {
+        mIsRefreshing = false;
+        mRefreshEnable = refresh;
+        if (mRefreshEnable) {
+            if (null == mRefreshView) {
+                setRefreshView(new DefaultRefreshView(BaseApplication.getContext()), DEFAULT_START_REFRESH_HEIGHT);
+            }
+        } else {
+            mRefreshView = null;
+        }
+    }
+
+    /**
+     * 设置自定义的下拉刷新视图。
+     *
+     * @param view 下拉刷新视图
+     */
+    public void setRefreshView(@NonNull RefreshView view, @Px int startRefreshHeight) {
+        mRefreshView = view;
+        mStartRefreshHeight = startRefreshHeight;
     }
 
     private int findLastVisibleItemPosition(RecyclerView.LayoutManager layoutManager) {
         if (layoutManager instanceof LinearLayoutManager) {
-            return ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
+            return ((LinearLayoutManager) layoutManager).findLastCompletelyVisibleItemPosition();
         } else if (layoutManager instanceof StaggeredGridLayoutManager) {
-            int[] lastVisibleItemPositions = ((StaggeredGridLayoutManager) layoutManager).findLastVisibleItemPositions(null);
+            int[] lastVisibleItemPositions =
+                    ((StaggeredGridLayoutManager) layoutManager).findLastCompletelyVisibleItemPositions(null);
             return findMax(lastVisibleItemPositions);
         }
         return -1;
@@ -355,12 +571,12 @@ public abstract class BaseExtendedAdapter<T> extends BaseListAdapter<T> {
     }
 
     private void loadMore() {
-        mLoadingMoreState = STATE_LOADING;
+        mLoadMoreState = STATE_LOAD_MORE_LOADING;
         if (mLoadMoreEnable) {
-            notifyItemChanged(getItemCount() - 1);
             if (null != mLoadMoreListener) {
                 mLoadMoreListener.onLoadMore();
             }
+            mLoadMoreView.showLoading();
         }
     }
 
@@ -368,19 +584,19 @@ public abstract class BaseExtendedAdapter<T> extends BaseListAdapter<T> {
      * 设置加载更多状态为加载完成
      */
     public void loadMoreEnd() {
-        mLoadingMoreState = STATE_NORMAL;
+        mLoadMoreState = STATE_LOAD_MORE_NORMAL;
         if (mLoadMoreEnable) {
-            notifyItemChanged(getItemCount() - 1);
+            mLoadMoreView.showNormal();
         }
     }
 
     /**
      * 设置加载更多状态为加载错误
      */
-    public void loadMoreError() {
-        mLoadingMoreState = STATE_ERROR;
+    public void loadMoreError(String errorMessage) {
+        mLoadMoreState = STATE_LOAD_MORE_ERROR;
         if (mLoadMoreEnable) {
-            notifyItemChanged(getItemCount() - 1);
+            mLoadMoreView.showError(errorMessage);
         }
     }
 
@@ -388,10 +604,62 @@ public abstract class BaseExtendedAdapter<T> extends BaseListAdapter<T> {
      * 设置加载更多状态为没有更多
      */
     public void noMore() {
-        mLoadingMoreState = STATE_NO_MORE;
+        mLoadMoreState = STATE_LOAD_MORE_NO_MORE;
         if (mLoadMoreEnable) {
-            notifyItemChanged(getItemCount() - 1);
+            mLoadMoreView.showNoMore();
         }
+    }
+
+    private int mLastAnimationValue;
+
+    /**
+     * 刷新完成
+     */
+    public void refreshEnd() {
+        ViewGroup.LayoutParams layoutParams = mRefreshView.getLayoutParams();
+        if (null == layoutParams) {
+            // 如果为空，则可能没有显示
+            mIsRefreshing = false;
+            return;
+        }
+        int startHeight = layoutParams.height;
+        ValueAnimator animator = ValueAnimator.ofInt(startHeight, 0);
+        animator.addUpdateListener(animation -> {
+            int newHeight = (Integer) animation.getAnimatedValue();
+            mRefreshView.getLayoutParams().height = newHeight;
+            mRefreshView.requestLayout();
+            mScrollOffset -= mLastAnimationValue - newHeight;
+            if (mScrollOffset < 0) {
+                mScrollOffset = 0;
+            }
+            mLastAnimationValue = newHeight;
+        });
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                mIsAnimating = true;
+                mIsRefreshing = false;
+                mLastAnimationValue = startHeight;
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                mIsAnimating = false;
+                mRefreshView.stopRefresh();
+            }
+        });
+        animator.start();
+    }
+
+    /**
+     * 当前是否正在刷新
+     *
+     * @return true 正在刷新
+     */
+    public boolean isRefreshing() {
+        return mIsRefreshing;
     }
 
     /**
@@ -408,5 +676,21 @@ public abstract class BaseExtendedAdapter<T> extends BaseListAdapter<T> {
          * 加载更多时调用
          */
         void onLoadMore();
+    }
+
+    /**
+     * 设置刷新的监听器
+     *
+     * @param refreshListener 监听器
+     */
+    public void setOnRefreshListener(OnRefreshListener refreshListener) {
+        mRefreshListener = refreshListener;
+    }
+
+    public interface OnRefreshListener {
+        /**
+         * 刷新时调用
+         */
+        void onRefresh();
     }
 }

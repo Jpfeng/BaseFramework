@@ -1,10 +1,11 @@
 package com.mix.baseframework;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.widget.TextView;
 
+import com.mix.baseframework.list.ListActivity;
 import com.mix.framework.base.ui.BaseStateActivity;
-import com.mix.framework.util.Logger;
 
 import butterknife.BindView;
 
@@ -20,6 +21,8 @@ public class DemoActivity extends BaseStateActivity<DemoContract.Presenter> impl
 
     @Override
     protected void initContent() {
+        startActivity(new Intent(this, ListActivity.class));
+        finish();
     }
 
     @NonNull

@@ -183,13 +183,17 @@ BaseExtendedAdapter
 
 所有列表均采用 `RecyclerView` 实现。 `BaseListAdapter` 实现了对 Adapter 的简单封装，使用泛型规定数据格式，提供 `setNewData(List<T>)` 方法设置数据。
 
-`BaseExtendedAdapter` 提供了添加头部和上拉加载更多的实现。可以通过 `addHeader(View)` 方法添加头部视图，也可添加多个，新添加的头部会在列表的最上端。上拉加载更多默认关闭，使用 `setLoadMoreEnable(true)` 方法开启，使用 `setOnLoadMoreListener(OnLoadMoreListener)` 方法添加加载更多的监听。一次加载完成时，需要调用 `addData(List<T>）` 方法添加新数据并调用 `loadMoreEnd()` 方法更新状态；加载出错时，调用 `loadMoreError()` 方法更新状态；没有更多数据时，调用 `noMore()` 方法更新状态。在实现 Adapter 时，需要实现 `onCreateViewHolderCompat(ViewGroup, int)` 和 `onBindViewHolderCompat(ViewHolder, int)` 方法，对应原始 Adapter 的 `onCreateViewHolder(ViewGroup, int)` 和 `onBindViewHolder(ViewHolder, int)` 。如果需要多条目类型，则重写 `getItemViewTypeCompat(int)` 方法。 所有 compat 方法的 `int` 参数均为 dataPosition ，即条目数据在数据集中的位置，不一定为条目在整个列表中的位置。
+`BaseExtendedAdapter` 提供了添加头部，添加尾部，下拉刷新和上拉加载更多的实现。可以通过 `addHeader(View)` 方法添加头部视图，也可添加多个，新添加的头部会在列表的最上端，但在下拉刷新条目之后。通过 `addFooter(View)` 方法添加尾部视图，可添加多个，新添加的尾部会在列表的最下端，但在上拉加载条目之前。下拉刷新默认关闭，使用 `setRefreshEnable(boolean)` 方法开启，使用 `setOnRefreshListener(OnRefreshListener)` 方法添加加载更多下拉刷新的监听。刷新完成时，需要调用 `setNewData(List<T>）` 方法替换新数据并调用 `refreshEnd()` 方法更新状态；上拉加载更多默认关闭，使用 `setLoadMoreEnable(true)` 方法开启，使用 `setOnLoadMoreListener(OnLoadMoreListener)` 方法添加加载更多的监听。一次加载完成时，需要调用 `addData(List<T>）` 方法添加新数据并调用 `loadMoreEnd()` 方法更新状态；加载出错时，调用 `loadMoreError()` 方法更新状态；没有更多数据时，调用 `noMore()` 方法更新状态。在实现 Adapter 时，需要实现 `onCreateViewHolderCompat(ViewGroup, int)` 和 `onBindViewHolderCompat(ViewHolder, int)` 方法，对应原始 Adapter 的 `onCreateViewHolder(ViewGroup, int)` 和 `onBindViewHolder(ViewHolder, int)` 。如果需要多条目类型，则重写 `getItemViewTypeCompat(int)` 方法。 所有 compat 方法的 `int` 参数均为 dataPosition ，即条目数据在数据集中的位置，不一定为条目在整个列表中的位置。
 
 ## 使用方法
 
 参照工程中 `app` 模块的 Demo 。
 
 ## 更改记录
+
+- 2018/05/30
+
+    列表添加下拉刷新
 
 - 2018/05/22
 

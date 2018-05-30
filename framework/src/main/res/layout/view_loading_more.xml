@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/ll_item_loading_more_root"
+    android:id="@+id/ll_loading_more_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
@@ -9,7 +9,7 @@
     android:padding="12dp">
 
     <ProgressBar
-        android:id="@+id/pb_item_loading_more_progress"
+        android:id="@+id/pb_loading_more_progress"
         style="?android:attr/progressBarStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,7 +17,7 @@
         android:layout_marginRight="12dp" />
 
     <TextView
-        android:id="@+id/tv_item_loading_more_hint"
+        android:id="@+id/tv_loading_more_hint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:lines="1"

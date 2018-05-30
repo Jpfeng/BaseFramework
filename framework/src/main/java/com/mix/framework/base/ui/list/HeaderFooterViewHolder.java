@@ -11,12 +11,12 @@ import com.mix.framework.R;
  * E-mail: fengjp@mixotc.com
  * Date: 2018/5/10
  */
-class HeaderViewHolder extends RecyclerView.ViewHolder {
+class HeaderFooterViewHolder extends RecyclerView.ViewHolder {
 
     FrameLayout mFlRoot;
 
-    HeaderViewHolder(View itemView) {
+    HeaderFooterViewHolder(View itemView) {
         super(itemView);
-        mFlRoot = itemView.findViewById(R.id.fl_item_header_root);
+        mFlRoot = itemView.findViewById(R.id.fl_item_header_footer_root);
     }
 }
