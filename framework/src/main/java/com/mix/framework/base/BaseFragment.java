@@ -74,6 +74,7 @@ public abstract class BaseFragment extends Fragment {
                 || (mStoppedByOthers && !mIsVisible)) {
             mIsVisible = true;
             onVisible();
+            mStoppedByOthers = false;
         }
         // Fragment 套嵌在 Viewpager 中时，Fragment#setUserVisibleHint(boolean) 会在 Fragment#onResume() 之前调用。
         // 此处判断 (!mSetUserVisibleHintCalled && !mLazyLoadCalled) 说明此 Fragment 并非在 ViewPager 中，在此处
