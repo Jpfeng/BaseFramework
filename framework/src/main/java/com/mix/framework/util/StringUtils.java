@@ -1,6 +1,6 @@
 package com.mix.framework.util;
 
-import android.support.annotation.StringRes;
+import androidx.annotation.StringRes;
 
 import com.mix.framework.base.BaseApplication;
 

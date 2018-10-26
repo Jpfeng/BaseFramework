@@ -1,6 +1,6 @@
 package com.mix.framework.util;
 
-import android.support.annotation.IdRes;
+import androidx.annotation.IdRes;
 
 /**
  * Author: Jpfeng

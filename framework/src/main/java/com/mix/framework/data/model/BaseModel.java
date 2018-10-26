@@ -1,7 +1,7 @@
 package com.mix.framework.data.model;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.mix.framework.data.net.NetClient;
 import com.mix.framework.data.net.util.ErrorResolver;

@@ -1,6 +1,6 @@
 package com.mix.framework.data.net.interceptor;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.mix.framework.data.net.util.NetConfig;

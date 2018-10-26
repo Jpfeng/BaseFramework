@@ -1,6 +1,6 @@
 package com.mix.framework.base.mvp;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.mix.framework.base.BaseActivity;
 import com.mix.framework.util.ApplicationUtils;

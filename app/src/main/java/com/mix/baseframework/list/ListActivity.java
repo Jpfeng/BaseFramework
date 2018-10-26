@@ -1,8 +1,8 @@
 package com.mix.baseframework.list;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +28,7 @@ public class ListActivity extends BaseStateActivity<ListContract.Presenter> impl
 
     @Override
     protected void initContent() {
-        mRv.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
+        mRv.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false));
         mAdapter = new ListAdapter();
         mAdapter.setRefreshEnable(true);
         mAdapter.setLoadMoreEnable(true);

@@ -1,6 +1,6 @@
 package com.mix.framework.data.net;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.mix.framework.data.model.ModelManager;
 import com.mix.framework.data.net.util.NetConfig;

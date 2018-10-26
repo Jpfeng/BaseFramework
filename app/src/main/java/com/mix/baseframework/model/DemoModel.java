@@ -1,6 +1,6 @@
 package com.mix.baseframework.model;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.mix.baseframework.net.DemoApi;
 import com.mix.framework.data.model.IModelCallback;

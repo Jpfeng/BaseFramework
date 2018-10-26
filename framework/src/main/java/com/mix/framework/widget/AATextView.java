@@ -13,7 +13,7 @@ import com.mix.framework.R;
  * Email: litt@mixotc.com
  * Date:  2018/5/10.
  */
-public class AATextView extends android.support.v7.widget.AppCompatTextView {
+public class AATextView extends androidx.appcompat.widget.AppCompatTextView {
 
     public AATextView(Context context) {
         this(context, null);

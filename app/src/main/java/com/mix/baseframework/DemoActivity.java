@@ -1,7 +1,7 @@
 package com.mix.baseframework;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.widget.TextView;
 
 import com.mix.baseframework.list.ListActivity;
