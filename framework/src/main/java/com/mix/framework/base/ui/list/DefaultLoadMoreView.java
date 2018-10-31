@@ -1,7 +1,6 @@
 package com.mix.framework.base.ui.list;
 
 import android.content.Context;
-import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +9,8 @@ import android.widget.TextView;
 
 import com.mix.framework.R;
 import com.mix.framework.util.StringUtils;
+
+import androidx.annotation.Nullable;
 
 /**
  * Author: Jpfeng

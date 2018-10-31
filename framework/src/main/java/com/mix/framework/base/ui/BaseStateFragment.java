@@ -1,6 +1,5 @@
 package com.mix.framework.base.ui;
 
-import androidx.annotation.LayoutRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -10,6 +9,7 @@ import com.mix.framework.R;
 import com.mix.framework.base.mvp.BaseMVPFragment;
 import com.mix.framework.base.mvp.IBasePresenter;
 
+import androidx.annotation.LayoutRes;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -68,7 +68,7 @@ public abstract class BaseStateFragment<P extends IBasePresenter> extends BaseMV
     }
 
     @Override
-    protected int getPageView() {
+    protected int getPageLayoutId() {
         return R.layout.fragment_base;
     }
 

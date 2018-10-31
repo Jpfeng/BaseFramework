@@ -1,14 +1,15 @@
 package com.mix.framework.base.ui.list;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.mix.framework.R;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * Author: Jpfeng

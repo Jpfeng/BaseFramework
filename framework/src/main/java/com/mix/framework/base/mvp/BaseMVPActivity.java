@@ -1,9 +1,9 @@
 package com.mix.framework.base.mvp;
 
-import androidx.annotation.NonNull;
-
 import com.mix.framework.base.BaseActivity;
 import com.mix.framework.util.ApplicationUtils;
+
+import androidx.annotation.NonNull;
 
 /**
  * Author: Jpfeng

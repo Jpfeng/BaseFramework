@@ -1,11 +1,12 @@
 package com.mix.framework.base.ui.list;
 
 import android.content.Context;
+import android.util.AttributeSet;
+import android.widget.FrameLayout;
+
 import androidx.annotation.FloatRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import android.util.AttributeSet;
-import android.widget.FrameLayout;
 
 /**
  * Author: Jpfeng

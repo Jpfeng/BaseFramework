@@ -1,52 +1,58 @@
 package com.mix.framework.base;
 
 import android.os.Bundle;
+
 import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.OnLifecycleEvent;
 
 /**
  * Author: Jpfeng
  * E-mail: fengjp@mixotc.com
  * Date: 2018/5/18
  */
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity implements LifecycleObserver {
 
     /**
-     * onLazyLoad() 方法是否已经调用
+     * {@link #onLazyLoad()} 方法是否已经调用
      */
     private boolean mLazyLoadCalled;
-
-    public BaseActivity() {
-        mLazyLoadCalled = false;
-    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(getPageView());
+        resetLazyLoadFlag();
+        getLifecycle().addObserver(this);
+        setContentView(getPageLayoutId());
         init();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    private void performLazyLoadIfNeed() {
         if (!mLazyLoadCalled) {
             onLazyLoad();
             mLazyLoadCalled = true;
         }
     }
 
-    /**
-     * 懒加载方法。首次 onResume() 时执行。
-     */
-    protected void onLazyLoad() {
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        getLifecycle().removeObserver(this);
+        resetLazyLoadFlag();
+    }
+
+    private void resetLazyLoadFlag() {
         mLazyLoadCalled = false;
+    }
+
+    /**
+     * 懒加载方法，首次 {@link #onResume()} 后执行
+     */
+    protected void onLazyLoad() {
     }
 
     /**
@@ -55,10 +61,10 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @return 页面内容布局
      */
     @LayoutRes
-    protected abstract int getPageView();
+    protected abstract int getPageLayoutId();
 
     /**
-     * 初始化页面。
+     * 初始化页面
      */
     protected abstract void init();
 }

@@ -1,6 +1,5 @@
 package com.mix.framework.base.ui;
 
-import androidx.annotation.LayoutRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -10,6 +9,7 @@ import com.mix.framework.R;
 import com.mix.framework.base.mvp.BaseMVPActivity;
 import com.mix.framework.base.mvp.IBasePresenter;
 
+import androidx.annotation.LayoutRes;
 import butterknife.ButterKnife;
 
 /**
@@ -41,7 +41,7 @@ public abstract class BaseStateActivity<P extends IBasePresenter> extends BaseMV
     private View mContentView;
 
     @Override
-    protected int getPageView() {
+    protected int getPageLayoutId() {
         return R.layout.activity_base;
     }
 

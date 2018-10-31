@@ -1,12 +1,13 @@
 package com.mix.framework.base.mvp;
 
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.view.View;
 
 import com.mix.framework.base.BaseFragment;
 import com.mix.framework.util.ApplicationUtils;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 
 /**
@@ -58,7 +59,7 @@ public abstract class BaseMVPFragment<P extends IBasePresenter> extends BaseFrag
     }
 
     @Override
-    protected void onLazyLoad() {
+    public void onLazyLoad() {
         super.onLazyLoad();
         mPresenter.onLazyLoad();
     }
