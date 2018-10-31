@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.mix.framework.widget.AATextView
+    <com.jpfeng.framework.widget.AATextView
         android:id="@+id/tv_page_empty_hint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
