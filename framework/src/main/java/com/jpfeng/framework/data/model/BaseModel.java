@@ -1,7 +1,12 @@
 package com.jpfeng.framework.data.model;
 
 import com.jpfeng.framework.data.net.NetClient;
-import com.jpfeng.framework.data.net.util.ErrorResolver;
+import com.jpfeng.framework.data.net.util.ErrorParser;
+import com.jpfeng.framework.data.net.util.MissingGenericException;
+import com.jpfeng.framework.data.net.util.NetError;
+
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,7 +29,7 @@ public abstract class BaseModel<S> {
     protected S mService;
 
     /**
-     * 将构造方法声明为 Protected 。不可手动调用构造方法进行实例化，保证统一使用 ModelManager 管理。
+     * 将构造方法声明为 Protected。不可手动调用构造方法进行实例化，保证统一使用 ModelManager 管理。
      */
     protected BaseModel() {
         final String className = this.getClass().getName();
@@ -56,7 +61,7 @@ public abstract class BaseModel<S> {
      * @param dataGetter    从 Response 中提取数据的方法
      * @param dataConverter 将数据进行转换的方法。运行在 IO 线程
      * @param callback      结果的回调。运行在主线程
-     * @param resolver      错误异常的解析类。如果为空，则返回 Throwable#getMessage()
+     * @param parser        错误异常的解析类
      * @param <P>           通用服务器返回类型的泛型
      * @param <D>           从服务器返回中提取数据的泛型
      * @param <R>           最终结果的泛型
@@ -66,7 +71,7 @@ public abstract class BaseModel<S> {
                                                       @NonNull FlowableTransformer<P, D> dataGetter,
                                                       @NonNull Function<D, R> dataConverter,
                                                       @NonNull IModelCallback<R> callback,
-                                                      @Nullable ErrorResolver resolver) {
+                                                      @Nullable ErrorParser parser) {
         return request.subscribeOn(Schedulers.io())
                 .compose(dataGetter)
                 .map(dataConverter)
@@ -85,15 +90,15 @@ public abstract class BaseModel<S> {
 
                     @Override
                     public void onError(Throwable t) {
-                        if (null != resolver) {
-                            callback.onError(resolver.resolveError(t));
-                        } else {
-                            callback.onError(t.getMessage());
-                        }
+                        NetError error = new NetError(t);
+                        error.parseRaw(parser);
+                        callback.onError(error);
+                        callback.onComplete(false);
                     }
 
                     @Override
                     public void onComplete() {
+                        callback.onComplete(true);
                     }
                 });
     }
@@ -102,14 +107,12 @@ public abstract class BaseModel<S> {
      * 初始化 Model ，创建 Service
      */
     protected void construct() {
-        mService = NetClient.getInstance().getRetrofitClient().create(getService());
+        Type type = getClass().getGenericSuperclass();
+        if (!(type instanceof ParameterizedType)) {
+            throw new MissingGenericException(getClass().getSimpleName()
+                    + " must have a generic type to specify Retrofit Service Interface");
+        }
+        Class<S> genericClass = (Class<S>) ((ParameterizedType) type).getActualTypeArguments()[0];
+        mService = NetClient.getInstance().getRetrofitClient().create(genericClass);
     }
-
-    /**
-     * 返回 Service 的类型。每个 Model 对应一个 Service 。
-     *
-     * @return Service 类
-     */
-    @NonNull
-    protected abstract Class<S> getService();
 }

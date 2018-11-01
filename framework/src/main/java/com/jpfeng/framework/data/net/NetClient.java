@@ -9,6 +9,7 @@ import retrofit2.Retrofit;
 
 /**
  * 网络连接管理类
+ * <p>
  * Author: Jpfeng
  * E-mail: fengjp@mixotc.com
  * Date: 2018/5/18
@@ -19,11 +20,11 @@ public class NetClient {
     private NetConfig mConfig;
 
     private NetClient(NetConfig config) {
-        mConfig = new NetConfig(config);
+        mConfig = config;
     }
 
     /**
-     * 初始化。必须首先调用初始化并传入 {@link com.jpfeng.framework.data.net.util.NetConfig}
+     * 初始化。必须首先调用初始化并传入 {@link NetConfig}
      *
      * @param config 设置
      */
@@ -42,16 +43,15 @@ public class NetClient {
     }
 
     /**
-     * 获取实例。必须在 init() 方法之后调用
+     * 获取实例。必须在 {@link #init(NetConfig)} 方法之后调用
      *
      * @return 实例
      */
     public static NetClient getInstance() {
-        if (null != mInstance) {
-            return mInstance;
-        } else {
+        if (null == mInstance) {
             throw new IllegalStateException("NetClient has not yet been initialized.");
         }
+        return mInstance;
     }
 
     /**
@@ -78,13 +78,13 @@ public class NetClient {
      * @param config 新的网络设置
      */
     public void updateConfig(NetConfig config) {
-        mConfig = new NetConfig(config);
+        mConfig = config;
         HttpClient.reconstruct();
         RetrofitClient.reconstruct();
         ModelManager.reconstructModels();
     }
 
     NetConfig getConfig() {
-        return new NetConfig(mConfig);
+        return mConfig;
     }
 }

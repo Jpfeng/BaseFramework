@@ -1,7 +1,6 @@
 package com.jpfeng.baseframework;
 
 import com.jpfeng.framework.base.mvp.IBasePresenter;
-import com.jpfeng.framework.base.mvp.IBaseView;
 import com.jpfeng.framework.base.ui.IStateView;
 
 /**
@@ -15,6 +14,5 @@ class DemoContract {
     }
 
     interface Presenter extends IBasePresenter<View> {
-        void updateModel();
     }
 }

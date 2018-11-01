@@ -2,7 +2,7 @@ package com.jpfeng.framework.data.model;
 
 import com.jpfeng.framework.util.ApplicationUtils;
 
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 
 /**
  * Model 统一管理类
+ * <p>
  * Author: Jpfeng
  * E-mail: fengjp@mixotc.com
  * Date: 2018/5/21
@@ -22,7 +23,7 @@ public class ModelManager {
     private static Map<String, BaseModel> mModelMap;
 
     static {
-        mModelMap = new HashMap<>();
+        mModelMap = new Hashtable<>();
     }
 
     private ModelManager() {
@@ -59,7 +60,7 @@ public class ModelManager {
     }
 
     /**
-     * 重新构建所有已注册的 Model 。一般用于网络设置变更
+     * 重新构建所有已注册的 Model。一般用于网络设置变更
      */
     public static void reconstructModels() {
         for (BaseModel model : mModelMap.values()) {
@@ -68,12 +69,12 @@ public class ModelManager {
     }
 
     /**
-     * 注册 Model 。ModelName 必须为唯一。
+     * 注册 Model。ModelName 必须为唯一。
      *
      * @param modelName Model 的类名
      * @param model     Model 的实例
      */
-    static void register(String modelName, BaseModel model) {
+    static void register(@NonNull String modelName, @NonNull BaseModel model) {
         mModelMap.put(modelName, model);
     }
 

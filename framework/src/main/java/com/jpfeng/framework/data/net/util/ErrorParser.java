@@ -6,6 +6,6 @@ package com.jpfeng.framework.data.net.util;
  * E-mail: fengjp@mixotc.com
  * Date: 2018/5/18
  */
-public interface ErrorResolver {
-    String resolveError(Throwable t);
+public interface ErrorParser {
+    void parse(Throwable t, NetError netError);
 }

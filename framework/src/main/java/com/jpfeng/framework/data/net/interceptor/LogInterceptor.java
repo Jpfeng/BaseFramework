@@ -3,7 +3,6 @@ package com.jpfeng.framework.data.net.interceptor;
 import android.text.TextUtils;
 
 import com.jpfeng.framework.BuildConfig;
-import com.jpfeng.framework.data.net.util.NetConfig;
 import com.jpfeng.framework.util.Logger;
 
 import java.io.IOException;
@@ -30,7 +29,7 @@ public class LogInterceptor implements Interceptor {
             long start = System.currentTimeMillis();
             Response response = chain.proceed(request);
             long end = System.currentTimeMillis();
-            Logger.debug(NetConfig.LOG_TAG, getLogContent(request, response, end - start));
+            Logger.netDebug(getLogContent(request, response, end - start));
             return response;
         } else {
             return chain.proceed(chain.request());

@@ -1,8 +1,8 @@
 package com.jpfeng.baseframework.util;
 
-import androidx.annotation.StringRes;
-
 import com.jpfeng.framework.base.BaseApplication;
+
+import androidx.annotation.StringRes;
 
 /**
  * Author: Jpfeng

@@ -5,6 +5,6 @@
     <string name="net_error_network">Network error</string>
     <string name="net_error_http" translatable="false">Http %d: %s</string>
     <string name="net_error_json_parse">Data parse error</string>
-    <string name="net_error_api">Error %d: %s</string>
+    <string name="net_error_api">Server Error</string>
     <string name="net_error_unknown">Unknown error</string>
 </resources>

@@ -1,9 +1,11 @@
 package com.jpfeng.baseframework.model;
 
-import androidx.annotation.NonNull;
-
+import com.jpfeng.baseframework.bean.ResultBean;
 import com.jpfeng.baseframework.net.DemoApi;
 import com.jpfeng.framework.data.model.IModelCallback;
+
+import java.util.List;
+import java.util.Map;
 
 import io.reactivex.subscribers.ResourceSubscriber;
 
@@ -13,14 +15,9 @@ import io.reactivex.subscribers.ResourceSubscriber;
  * Date: 2018/5/21
  */
 public class DemoModel extends BaseModelImpl<DemoApi> {
-    @NonNull
-    @Override
-    protected Class<DemoApi> getService() {
-        return DemoApi.class;
-    }
 
-    public ResourceSubscriber<String> getTips(IModelCallback<String> callback) {
+    public ResourceSubscriber<Map<String, List<ResultBean>>> getToday(IModelCallback<Map<String, List<ResultBean>>> callback) {
         // 网络请求模板
-        return request(mService.getSearchTips(), callback);
+        return request(mService.getToday(), callback);
     }
 }

@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import com.jpfeng.framework.data.model.BaseModel;
 import com.jpfeng.framework.data.model.IModelCallback;
-import com.jpfeng.framework.data.net.util.ErrorResolver;
+import com.jpfeng.framework.data.net.util.ErrorParser;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
@@ -54,11 +54,11 @@ public abstract class BasePresenter<V extends IBaseView> implements IBasePresent
 
     /**
      * 进行 http 网络请求的方法。配合 {@link BaseModel#request(Flowable, FlowableTransformer, Function,
-     * IModelCallback, ErrorResolver)} 使用。
+     * IModelCallback, ErrorParser)} 使用。
      * 可以对页面的订阅进行统一管理。
      *
      * @param subscriber {@link BaseModel#request(Flowable, FlowableTransformer, Function,
-     *                   IModelCallback, ErrorResolver)} 返回的订阅
+     *                   IModelCallback, ErrorParser)} 返回的订阅
      * @param <T>        返回数据的泛型
      */
     protected <T> void makeRequest(ResourceSubscriber<T> subscriber) {

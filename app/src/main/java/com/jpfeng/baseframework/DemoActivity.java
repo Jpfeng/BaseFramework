@@ -1,9 +1,7 @@
 package com.jpfeng.baseframework;
 
-import android.content.Intent;
 import android.widget.TextView;
 
-import com.jpfeng.baseframework.fragment.FragmentTestActivity;
 import com.jpfeng.framework.base.ui.BaseStateActivity;
 
 import androidx.annotation.NonNull;
@@ -21,8 +19,8 @@ public class DemoActivity extends BaseStateActivity<DemoContract.Presenter> impl
 
     @Override
     protected void initContent() {
-        startActivity(new Intent(this, FragmentTestActivity.class));
-        finish();
+//        startActivity(new Intent(this, FragmentTestActivity.class));
+//        finish();
     }
 
     @NonNull
@@ -39,6 +37,5 @@ public class DemoActivity extends BaseStateActivity<DemoContract.Presenter> impl
     @Override
     protected void onErrorViewClicked() {
         super.onErrorViewClicked();
-        mPresenter.updateModel();
     }
 }

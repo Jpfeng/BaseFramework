@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 class RetrofitClient {
 
     /**
-     * 全局的 RetrofitClient ,用于 http 请求。
+     * 全局的 RetrofitClient, 用于 http 请求。
      */
     private static volatile Retrofit mInstance;
 

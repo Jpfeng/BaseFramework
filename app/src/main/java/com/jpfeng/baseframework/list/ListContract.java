@@ -1,7 +1,6 @@
 package com.jpfeng.baseframework.list;
 
 import com.jpfeng.framework.base.mvp.IBasePresenter;
-import com.jpfeng.framework.base.mvp.IBaseView;
 import com.jpfeng.framework.base.ui.IStateView;
 
 import java.util.ArrayList;

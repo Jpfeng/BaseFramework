@@ -1,8 +1,5 @@
 package com.jpfeng.baseframework.list;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +10,9 @@ import com.jpfeng.framework.base.ui.BaseStateActivity;
 
 import java.util.ArrayList;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 
 public class ListActivity extends BaseStateActivity<ListContract.Presenter> implements ListContract.View {

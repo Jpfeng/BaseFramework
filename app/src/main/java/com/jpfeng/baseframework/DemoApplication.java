@@ -14,7 +14,7 @@ public class DemoApplication extends BaseApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        NetConfig config = new NetConfig("http://127.0.0.1/");
+        NetConfig config = new NetConfig.Builder().setBaseUrl("https://gank.io/api/").build();
         NetClient.init(config);
     }
 }

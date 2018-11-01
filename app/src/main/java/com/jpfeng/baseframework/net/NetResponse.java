@@ -1,32 +1,43 @@
 package com.jpfeng.baseframework.net;
 
+import java.util.List;
+
 public class NetResponse<T> {
 
-    private int code;
-    private String msg;
-    private T data;
+    private List<String> category;
+    private int count;
+    private boolean error;
+    private T results;
 
-    public int getCode() {
-        return code;
+    public List<String> getCategory() {
+        return category;
     }
 
-    public void setCode(int code) {
-        this.code = code;
+    public void setCategory(List<String> category) {
+        this.category = category;
     }
 
-    public String getMsg() {
-        return msg;
+    public int getCount() {
+        return count;
     }
 
-    public void setMsg(String message) {
-        this.msg = message;
+    public void setCount(int count) {
+        this.count = count;
     }
 
-    public T getData() {
-        return data;
+    public boolean isError() {
+        return error;
     }
 
-    public void setData(T data) {
-        this.data = data;
+    public void setError(boolean error) {
+        this.error = error;
+    }
+
+    public T getResults() {
+        return results;
+    }
+
+    public void setResults(T results) {
+        this.results = results;
     }
 }

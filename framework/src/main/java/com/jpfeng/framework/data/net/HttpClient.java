@@ -16,7 +16,7 @@ import okhttp3.OkHttpClient;
 class HttpClient {
 
     /**
-     * 全局的 HttpClient ,用于 http 请求和 webSocket 连接。
+     * 全局的 HttpClient, 用于 http 请求。
      */
     private static volatile OkHttpClient mInstance;
 

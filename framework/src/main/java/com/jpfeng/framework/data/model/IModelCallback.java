@@ -1,5 +1,7 @@
 package com.jpfeng.framework.data.model;
 
+import com.jpfeng.framework.data.net.util.NetError;
+
 /**
  * Author: Jpfeng
  * E-mail: fengjp@mixotc.com
@@ -20,7 +22,14 @@ public interface IModelCallback<T> {
     /**
      * 请求出错的回调。
      *
-     * @param msg 包装的错误信息，可直接显示给用户。
+     * @param error 包装的错误信息，可直接显示给用户。
      */
-    void onError(String msg);
+    void onError(NetError error);
+    /**
+     * 请求结束。
+     * 不管成功与失败均会回调。
+     *
+     * @param success 是否成功
+     */
+    void onComplete(boolean success);
 }

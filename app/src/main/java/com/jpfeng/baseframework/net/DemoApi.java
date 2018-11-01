@@ -1,5 +1,10 @@
 package com.jpfeng.baseframework.net;
 
+import com.jpfeng.baseframework.bean.ResultBean;
+
+import java.util.List;
+import java.util.Map;
+
 import io.reactivex.Flowable;
 import retrofit2.http.GET;
 
@@ -10,8 +15,8 @@ import retrofit2.http.GET;
  */
 public interface DemoApi {
 
-    @GET(SEARCH_TIPS)
-    Flowable<NetResponse<String>> getSearchTips();
+    @GET(TODAY)
+    Flowable<NetResponse<Map<String, List<ResultBean>>>> getToday();
 
-    String SEARCH_TIPS = "home/searchRecommend";//获取首页的搜索提示
+    String TODAY = "today";
 }

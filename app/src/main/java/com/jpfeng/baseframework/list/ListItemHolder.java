@@ -1,11 +1,11 @@
 package com.jpfeng.baseframework.list;
 
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
 import com.jpfeng.baseframework.R;
 
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

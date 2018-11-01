@@ -1,12 +1,13 @@
 package com.jpfeng.baseframework.list;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.jpfeng.baseframework.R;
 import com.jpfeng.framework.base.ui.list.BaseExtendedAdapter;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Author: Jpfeng

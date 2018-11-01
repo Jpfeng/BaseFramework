@@ -12,7 +12,8 @@ import com.jpfeng.framework.BuildConfig;
 public class Logger {
 
     private static final boolean isDebug = BuildConfig.DEBUG;
-    private static final String TAG = "CoinRising/" + BuildConfig.VERSION_NAME;
+    private static final String TAG = BuildConfig.APPLICATION_ID + "/" + BuildConfig.VERSION_NAME;
+    private static final String NET_TAG = "App/NetLog";
 
     private Logger() {
     }
@@ -32,6 +33,18 @@ public class Logger {
     }
 
     public static void debug(String tag, String msg) {
+        if (isDebug) {
+            Log.d(tag, msg);
+        }
+    }
+
+    public static void netDebug(String msg) {
+        if (isDebug) {
+            Log.d(NET_TAG, msg);
+        }
+    }
+
+    public static void netDebug(String tag, String msg) {
         if (isDebug) {
             Log.d(tag, msg);
         }

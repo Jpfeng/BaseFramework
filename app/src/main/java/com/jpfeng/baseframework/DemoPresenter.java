@@ -1,12 +1,15 @@
 package com.jpfeng.baseframework;
 
+import com.jpfeng.baseframework.bean.ResultBean;
 import com.jpfeng.baseframework.model.DemoModel;
 import com.jpfeng.framework.base.mvp.BasePresenter;
 import com.jpfeng.framework.data.model.IModelCallback;
 import com.jpfeng.framework.data.model.ModelManager;
-import com.jpfeng.framework.data.net.NetClient;
-import com.jpfeng.framework.data.net.util.NetConfig;
-import com.jpfeng.baseframework.util.ToastUtils;
+import com.jpfeng.framework.data.net.util.NetError;
+import com.jpfeng.framework.util.Logger;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Author: Jpfeng
@@ -21,30 +24,28 @@ public class DemoPresenter extends BasePresenter<DemoContract.View> implements D
     }
 
     private void loadData() {
-        ModelManager.get(DemoModel.class).getTips(new IModelCallback<String>() {
-            @Override
-            public void onStart() {
-                mView.showPageLoading();
-            }
+        makeRequest(ModelManager.get(DemoModel.class)
+                .getToday(new IModelCallback<Map<String, List<ResultBean>>>() {
+                    @Override
+                    public void onStart() {
+                        mView.showPageLoading();
+                    }
 
-            @Override
-            public void onSuccess(String data) {
-                mView.showTip(data);
-                mView.showPageContent();
-            }
+                    @Override
+                    public void onSuccess(Map<String, List<ResultBean>> data) {
+//                        mView.showTip(data);
+                        Logger.netDebug(data.toString());
+                        mView.showPageContent();
+                    }
 
-            @Override
-            public void onError(String msg) {
-                mView.showPageError(msg);
-            }
-        });
-    }
+                    @Override
+                    public void onError(NetError error) {
+                        mView.showPageError(error.getMessage());
+                    }
 
-    @Override
-    public void updateModel() {
-        NetConfig config = new NetConfig("http://47.74.244.196/v1/");
-        NetClient.getInstance().updateConfig(config);
-        ToastUtils.show("config updated");
-        loadData();
+                    @Override
+                    public void onComplete(boolean success) {
+                    }
+                }));
     }
 }
