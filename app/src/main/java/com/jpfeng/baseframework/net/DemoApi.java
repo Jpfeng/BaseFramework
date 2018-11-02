@@ -7,6 +7,7 @@ import java.util.Map;
 
 import io.reactivex.Flowable;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 
 /**
  * Author: Jpfeng
@@ -14,9 +15,12 @@ import retrofit2.http.GET;
  * Date: 2018/5/21
  */
 public interface DemoApi {
+    String TODAY = "today";
+    String DATA = "data/{type}/20/{page}";
 
     @GET(TODAY)
     Flowable<NetResponse<Map<String, List<ResultBean>>>> getToday();
 
-    String TODAY = "today";
+    @GET(DATA)
+    Flowable<NetResponse<String>> getData(@Path("type") String type, @Path("page") String page);
 }

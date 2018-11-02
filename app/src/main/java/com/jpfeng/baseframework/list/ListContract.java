@@ -1,7 +1,7 @@
 package com.jpfeng.baseframework.list;
 
 import com.jpfeng.framework.base.mvp.IBasePresenter;
-import com.jpfeng.framework.base.ui.IStateView;
+import com.jpfeng.framework.base.mvp.IBaseView;
 
 import java.util.ArrayList;
 
@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * Date: 2018/5/29
  */
 class ListContract {
-    interface View extends IStateView {
+    interface View extends IBaseView {
         void setNewData(ArrayList<String> data);
         void addData(ArrayList<String> data);
     }

@@ -1,7 +1,7 @@
 package com.jpfeng.baseframework;
 
 import com.jpfeng.framework.base.mvp.IBasePresenter;
-import com.jpfeng.framework.base.ui.IStateView;
+import com.jpfeng.framework.base.mvp.IBaseView;
 
 /**
  * Author: Jpfeng
@@ -9,10 +9,14 @@ import com.jpfeng.framework.base.ui.IStateView;
  * Date: 2018/5/21
  */
 class DemoContract {
-    interface View extends IStateView {
-        void showTip(String tip);
+    interface View extends IBaseView {
+        void showData(String tip);
+        void showEmpty();
+        void showError(String error);
+        void showLoading();
     }
 
     interface Presenter extends IBasePresenter<View> {
+        void reload();
     }
 }

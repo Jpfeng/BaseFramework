@@ -46,7 +46,7 @@ public class BaseErrorParser implements ErrorParser {
             netError.setMessage(StringUtils.getString(R.string.net_error_api));
         } else {
             // 未知错误
-            netError.setCode(ErrorCode.NET_ERR_UNKONWN);
+            netError.setCode(ErrorCode.NET_ERR_UNKNOWN);
             netError.setMessage(StringUtils.getString(R.string.net_error_unknown));
         }
     }

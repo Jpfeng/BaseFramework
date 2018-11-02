@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- AATextView xml 属性 -->
-    <declare-styleable name="AATextView">
-        <!-- 是否有下划线 -->
-        <attr name="aatv_underline" format="boolean" />
-        <!-- 是否开启抗锯齿 -->
-        <attr name="aatv_anti_alias" format="boolean" />
+    <declare-styleable name="StateContainerView">
+        <attr name="sc_state" format="enum">
+            <enum name="content" value="0" />
+            <enum name="empty" value="1" />
+            <enum name="error" value="2" />
+            <enum name="loading" value="3" />
+        </attr>
+        <attr name="sc_emptyLayout" format="reference" />
+        <attr name="sc_errorLayout" format="reference" />
+        <attr name="sc_loadingLayout" format="reference" />
     </declare-styleable>
-    <attr name="AATextViewStyle" format="reference" />
+    <attr name="stateContainerViewStyle" format="reference" />
 </resources>

@@ -20,7 +20,6 @@ public class ListPresenter extends BasePresenter<ListContract.View> implements L
     }
 
     private void initLoad() {
-        mView.showPageLoading();
         refresh();
     }
 

@@ -1,5 +1,7 @@
 package com.jpfeng.baseframework;
 
+import android.text.TextUtils;
+
 import com.jpfeng.baseframework.bean.ResultBean;
 import com.jpfeng.baseframework.model.DemoModel;
 import com.jpfeng.framework.base.mvp.BasePresenter;
@@ -23,24 +25,34 @@ public class DemoPresenter extends BasePresenter<DemoContract.View> implements D
         loadData();
     }
 
+    @Override
+    public void reload() {
+        loadData();
+    }
+
     private void loadData() {
         makeRequest(ModelManager.get(DemoModel.class)
                 .getToday(new IModelCallback<Map<String, List<ResultBean>>>() {
                     @Override
                     public void onStart() {
-                        mView.showPageLoading();
+                        mView.showLoading();
                     }
 
                     @Override
                     public void onSuccess(Map<String, List<ResultBean>> data) {
-//                        mView.showTip(data);
-                        Logger.netDebug(data.toString());
-                        mView.showPageContent();
+                        String tip = data.toString();
+                        Logger.netDebug(tip);
+                        if (TextUtils.isEmpty(tip)) {
+                            mView.showEmpty();
+                        } else {
+                            mView.showData(tip);
+
+                        }
                     }
 
                     @Override
                     public void onError(NetError error) {
-                        mView.showPageError(error.getMessage());
+                        mView.showError(error.getMessage());
                     }
 
                     @Override

@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.jpfeng.baseframework.R;
-import com.jpfeng.framework.base.ui.BaseStateActivity;
+import com.jpfeng.framework.base.mvp.BaseMVPActivity;
 
 import java.util.ArrayList;
 
@@ -15,19 +15,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 
-public class ListActivity extends BaseStateActivity<ListContract.Presenter> implements ListContract.View {
+public class ListActivity extends BaseMVPActivity<ListContract.Presenter> implements ListContract.View {
 
     @BindView(R.id.rv_list)
     RecyclerView mRv;
     private ListAdapter mAdapter;
 
     @Override
-    protected int getContentView() {
+    protected int getPageLayoutId() {
         return R.layout.activity_list;
     }
 
     @Override
-    protected void initContent() {
+    protected void initPage() {
         mRv.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false));
         mAdapter = new ListAdapter();
         mAdapter.setRefreshEnable(true);
@@ -79,7 +79,6 @@ public class ListActivity extends BaseStateActivity<ListContract.Presenter> impl
         mRv.postDelayed(() -> {
             mAdapter.setNewData(data);
             mAdapter.refreshEnd();
-            showPageContent();
         }, 2000);
     }
 

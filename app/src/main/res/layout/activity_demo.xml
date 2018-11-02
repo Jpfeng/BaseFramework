@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.jpfeng.framework.widget.StateContainerView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scv_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:sc_emptyLayout="@layout/layout_page_empty"
+    app:sc_errorLayout="@layout/layout_page_error"
+    app:sc_loadingLayout="@layout/layout_page_loading"
+    app:sc_state="loading"
     tools:context=".DemoActivity">
 
     <TextView
@@ -11,5 +17,4 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:textColor="@color/colorAccent" />
-
-</FrameLayout>
+</com.jpfeng.framework.widget.StateContainerView>
