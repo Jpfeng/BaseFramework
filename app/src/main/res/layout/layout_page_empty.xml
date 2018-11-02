@@ -8,6 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:padding="16dp"
-        android:text="@string/page_empty_default" />
+        android:drawableTop="@android:drawable/ic_menu_view"
+        android:padding="@dimen/page_margin_default"
+        android:text="@string/page_empty" />
 </FrameLayout>

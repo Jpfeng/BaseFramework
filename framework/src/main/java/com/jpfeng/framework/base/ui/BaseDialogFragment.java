@@ -24,7 +24,7 @@ import butterknife.Unbinder;
  */
 public abstract class BaseDialogFragment extends DialogFragment {
 
-    private Unbinder mUnbinder;
+    private Unbinder mUnBinder;
     private int mWidth = WindowManager.LayoutParams.MATCH_PARENT;
     private int mHeight = WindowManager.LayoutParams.MATCH_PARENT;
 
@@ -36,8 +36,8 @@ public abstract class BaseDialogFragment extends DialogFragment {
             // 将对话框内部背景设为透明
             window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         }
-        View view = inflater.inflate(getContentView(), container, false);
-        mUnbinder = ButterKnife.bind(this, view);
+        View view = inflater.inflate(getPageLayoutId(), container, false);
+        mUnBinder = ButterKnife.bind(this, view);
         initView(view);
         return view;
     }
@@ -60,7 +60,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mUnbinder.unbind();
+        mUnBinder.unbind();
     }
 
     /**
@@ -74,7 +74,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
         mHeight = height;
         Dialog dialog = getDialog();
         if (null == dialog) {
-            // 如果 dialog 为 null ，说明此时该对话框还未显示。将设置宽高的操作延迟到 onStart() 进行。
+            // 如果 dialog 为 null，说明此时该对话框还未显示。将设置宽高的操作延迟到 onStart() 进行。
             return;
         }
         Window window = dialog.getWindow();
@@ -89,7 +89,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
      * @return 对话框内容布局
      */
     @LayoutRes
-    protected abstract int getContentView();
+    protected abstract int getPageLayoutId();
 
     /**
      * 初始化对话框

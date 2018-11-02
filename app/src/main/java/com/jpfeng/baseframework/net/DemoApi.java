@@ -16,11 +16,7 @@ import retrofit2.http.Path;
  */
 public interface DemoApi {
     String TODAY = "today";
-    String DATA = "data/{type}/20/{page}";
 
     @GET(TODAY)
     Flowable<NetResponse<Map<String, List<ResultBean>>>> getToday();
-
-    @GET(DATA)
-    Flowable<NetResponse<String>> getData(@Path("type") String type, @Path("page") String page);
 }

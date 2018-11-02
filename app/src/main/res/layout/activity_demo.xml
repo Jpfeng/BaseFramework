@@ -2,19 +2,24 @@
 <com.jpfeng.framework.widget.StateContainerView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/scv_container"
+    android:id="@+id/scv_demo_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:sc_emptyLayout="@layout/layout_page_empty"
     app:sc_errorLayout="@layout/layout_page_error"
     app:sc_loadingLayout="@layout/layout_page_loading"
     app:sc_state="loading"
-    tools:context=".DemoActivity">
+    tools:context=".ui.DemoActivity">
 
-    <TextView
-        android:id="@+id/tv_demo_tip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textColor="@color/colorAccent" />
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/srl_demo_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_demo_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </com.jpfeng.framework.widget.StateContainerView>

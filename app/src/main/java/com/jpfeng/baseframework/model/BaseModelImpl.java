@@ -1,6 +1,6 @@
 package com.jpfeng.baseframework.model;
 
-import com.jpfeng.baseframework.net.BaseErrorParser;
+import com.jpfeng.baseframework.net.ErrorParserImpl;
 import com.jpfeng.baseframework.net.NetResponse;
 import com.jpfeng.baseframework.net.ServerException;
 import com.jpfeng.framework.data.model.BaseModel;
@@ -26,7 +26,7 @@ public abstract class BaseModelImpl<S> extends BaseModel<S> {
     protected <T, R> ResourceSubscriber<R> request(Flowable<NetResponse<T>> request,
                                                    Function<T, R> converter,
                                                    IModelCallback<R> callback) {
-        return request(request, convertResult(), converter, callback, new BaseErrorParser());
+        return request(request, convertResult(), converter, callback, new ErrorParserImpl());
     }
 
     private <T> FlowableTransformer<NetResponse<T>, T> convertResult() {

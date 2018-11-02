@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="text_size_small">12sp</dimen>
+    <dimen name="text_size_default">14sp</dimen>
+    <dimen name="text_size_large">16sp</dimen>
+    <dimen name="page_margin_default">16dp</dimen>
+    <dimen name="page_margin_small">8dp</dimen>
+    <dimen name="list_item_image_width">96dp</dimen>
+    <dimen name="list_item_image_height">64dp</dimen>
+</resources>

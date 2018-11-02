@@ -1,9 +1,0 @@
-<resources>
-    <string name="app_name">framework</string>
-    <string name="page_empty_default">No Data Here</string>
-    <string name="page_error_default">Load Error!</string>
-    <string name="loading_more">pull up to load more</string>
-    <string name="loading_more_loading">loading…</string>
-    <string name="loading_more_error">error… click to retry</string>
-    <string name="loading_more_end">no more data</string>
-</resources>
