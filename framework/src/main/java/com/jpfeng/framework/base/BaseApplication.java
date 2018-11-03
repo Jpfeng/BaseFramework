@@ -7,7 +7,7 @@ import java.lang.ref.WeakReference;
 
 /**
  * Author: Jpfeng
- * E-mail: fengjp@mixotc.com
+ * E-mail: fengjup@live.com
  * Date: 2018/5/8
  */
 public class BaseApplication extends Application {

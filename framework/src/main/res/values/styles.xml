@@ -1,4 +1,5 @@
 <resources>
+
     <style name="defaultStateViewStyle">
         <item name="sc_state">content</item>
     </style>

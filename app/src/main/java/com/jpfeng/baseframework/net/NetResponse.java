@@ -2,6 +2,11 @@ package com.jpfeng.baseframework.net;
 
 import java.util.List;
 
+/**
+ * Author: Jpfeng
+ * E-mail: fengjup@live.com
+ * Date: 2018/5/21
+ */
 public class NetResponse<T> {
 
     private List<String> category;

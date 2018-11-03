@@ -4,7 +4,7 @@ import com.jpfeng.framework.data.net.util.NetError;
 
 /**
  * Author: Jpfeng
- * E-mail: fengjp@mixotc.com
+ * E-mail: fengjup@live.com
  * Date: 2018/5/8
  */
 public interface IModelCallback<T> {

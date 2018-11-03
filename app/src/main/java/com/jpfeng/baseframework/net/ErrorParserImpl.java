@@ -15,7 +15,7 @@ import retrofit2.HttpException;
 
 /**
  * Author: Jpfeng
- * E-mail: fengjp@mixotc.com
+ * E-mail: fengjup@live.com
  * Date: 2018/5/21
  */
 public class ErrorParserImpl implements ErrorParser {

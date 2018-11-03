@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 
 /**
  * Author: Jpfeng
- * E-mail: fengjp@mixotc.com
+ * E-mail: fengjup@live.com
  * Date: 2018/5/14
  */
 public abstract class BaseMVPFragment<P extends IBasePresenter> extends BaseFragment implements IBaseView {

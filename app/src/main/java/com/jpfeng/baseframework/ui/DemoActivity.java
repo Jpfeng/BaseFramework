@@ -20,6 +20,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * Author: Jpfeng
+ * E-mail: fengjup@live.com
+ * Date: 2018/5/21
+ */
 public class DemoActivity extends BaseMVPActivity<DemoContract.Presenter> implements DemoContract.View {
 
     @BindView(R.id.scv_demo_container)

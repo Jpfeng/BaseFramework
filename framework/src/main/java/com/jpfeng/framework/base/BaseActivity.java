@@ -11,7 +11,7 @@ import androidx.lifecycle.OnLifecycleEvent;
 
 /**
  * Author: Jpfeng
- * E-mail: fengjp@mixotc.com
+ * E-mail: fengjup@live.com
  * Date: 2018/5/18
  */
 public abstract class BaseActivity extends AppCompatActivity implements LifecycleObserver {

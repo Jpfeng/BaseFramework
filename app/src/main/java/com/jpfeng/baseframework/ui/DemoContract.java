@@ -1,7 +1,6 @@
 package com.jpfeng.baseframework.ui;
 
 import com.jpfeng.baseframework.bean.DemoBean;
-import com.jpfeng.baseframework.bean.ResultBean;
 import com.jpfeng.framework.base.mvp.IBasePresenter;
 import com.jpfeng.framework.base.mvp.IBaseView;
 
@@ -9,7 +8,7 @@ import java.util.List;
 
 /**
  * Author: Jpfeng
- * E-mail: fengjp@mixotc.com
+ * E-mail: fengjup@live.com
  * Date: 2018/5/21
  */
 class DemoContract {

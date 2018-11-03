@@ -22,7 +22,7 @@ import androidx.annotation.StyleRes;
  * 可显示状态的视图容器
  *
  * @author Jpfeng
- * E-mail: fengjupeng@whale.ws
+ * E-mail: fengjup@live.com
  * Date: 2018/11/1
  * @attr ref R.styleable#StateContainerView_sc_state
  * @attr ref R.styleable#StateContainerView_sc_emptyLayout

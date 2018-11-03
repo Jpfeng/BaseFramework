@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
  * Model 统一管理类
  * <p>
  * Author: Jpfeng
- * E-mail: fengjp@mixotc.com
+ * E-mail: fengjup@live.com
  * Date: 2018/5/21
  */
 public class ModelManager {

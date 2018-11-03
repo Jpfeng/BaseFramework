@@ -18,7 +18,7 @@ import okio.Buffer;
 /**
  * 显示网络请求日志的拦截器
  * Author: Jpfeng
- * E-mail: fengjp@mixotc.com
+ * E-mail: fengjup@live.com
  * Date: 2018/5/4
  */
 public class LogInterceptor implements Interceptor {

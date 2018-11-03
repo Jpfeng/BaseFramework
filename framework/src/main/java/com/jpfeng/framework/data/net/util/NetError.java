@@ -6,7 +6,7 @@ import androidx.annotation.Nullable;
 
 /**
  * Author: Jpfeng
- * E-mail: fengjupeng@whale.ws
+ * E-mail: fengjup@live.com
  * Date: 2018/11/1
  */
 public class NetError implements Serializable {

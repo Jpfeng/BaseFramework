@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 
 /**
  * Author: Jpfeng
- * E-mail: fengjp@mixotc.com
+ * E-mail: fengjup@live.com
  * Date: 2018/5/14
  */
 public abstract class BaseMVPActivity<P extends IBasePresenter> extends BaseActivity implements IBaseView {

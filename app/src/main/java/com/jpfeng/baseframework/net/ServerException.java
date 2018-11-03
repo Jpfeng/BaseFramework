@@ -4,7 +4,7 @@ package com.jpfeng.baseframework.net;
  * 服务器错误
  * <p>
  * Author: Jpfeng
- * E-mail: fengjp@mixotc.com
+ * E-mail: fengjup@live.com
  * Date: 2018/4/26
  */
 public class ServerException extends Exception {

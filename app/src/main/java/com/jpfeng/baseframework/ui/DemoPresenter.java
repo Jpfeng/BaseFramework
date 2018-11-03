@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * Author: Jpfeng
- * E-mail: fengjp@mixotc.com
+ * E-mail: fengjup@live.com
  * Date: 2018/5/21
  */
 public class DemoPresenter extends BasePresenter<DemoContract.View> implements DemoContract.Presenter {

@@ -19,7 +19,7 @@ import butterknife.Unbinder;
 
 /**
  * Author: Jpfeng
- * E-mail: fengjp@mixotc.com
+ * E-mail: fengjup@live.com
  * Date: 2018/5/8
  */
 public abstract class BaseDialogFragment extends DialogFragment {

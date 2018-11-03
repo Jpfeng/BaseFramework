@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Author: Jpfeng
- * E-mail: fengjp@mixotc.com
+ * E-mail: fengjup@live.com
  * Date: 2018/5/7
  */
 class RetrofitClient {

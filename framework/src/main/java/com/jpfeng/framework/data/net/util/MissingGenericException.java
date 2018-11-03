@@ -4,7 +4,7 @@ package com.jpfeng.framework.data.net.util;
  * 缺少必要的泛型参数
  * <p>
  * Author: Jpfeng
- * E-mail: fengjupeng@whale.ws
+ * E-mail: fengjup@live.com
  * Date: 2018/11/1
  */
 public class MissingGenericException extends RuntimeException {

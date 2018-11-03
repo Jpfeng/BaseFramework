@@ -18,7 +18,7 @@ import io.reactivex.subscribers.ResourceSubscriber;
 
 /**
  * Author: Jpfeng
- * E-mail: fengjp@mixotc.com
+ * E-mail: fengjup@live.com
  * Date: 2018/4/26
  */
 public abstract class BasePresenter<V extends IBaseView> implements IBasePresenter<V> {

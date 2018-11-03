@@ -6,7 +6,7 @@ import com.jpfeng.framework.BuildConfig;
 
 /**
  * Author: Jpfeng
- * E-mail: fengjp@mixotc.com
+ * E-mail: fengjup@live.com
  * Date: 2018/5/4
  */
 public class Logger {

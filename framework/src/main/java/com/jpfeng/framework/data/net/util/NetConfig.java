@@ -10,7 +10,7 @@ import okhttp3.Interceptor;
 /**
  * 网络设置类
  * Author: Jpfeng
- * E-mail: fengjp@mixotc.com
+ * E-mail: fengjup@live.com
  * Date: 2018/5/4
  */
 public class NetConfig implements Serializable {

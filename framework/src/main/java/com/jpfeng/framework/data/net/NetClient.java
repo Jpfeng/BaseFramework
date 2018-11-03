@@ -11,7 +11,7 @@ import retrofit2.Retrofit;
  * 网络连接管理类
  * <p>
  * Author: Jpfeng
- * E-mail: fengjp@mixotc.com
+ * E-mail: fengjup@live.com
  * Date: 2018/5/18
  */
 public class NetClient {

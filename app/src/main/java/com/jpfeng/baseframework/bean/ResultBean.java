@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  * Author: Jpfeng
- * E-mail: fengjupeng@whale.ws
+ * E-mail: fengjup@live.com
  * Date: 2018/11/1
  */
 public class ResultBean implements Serializable {
