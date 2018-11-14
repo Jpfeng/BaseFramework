@@ -5,7 +5,6 @@ import com.jpfeng.baseframework.R;
 import com.jpfeng.baseframework.util.StringUtils;
 import com.jpfeng.framework.data.net.util.ErrorParser;
 import com.jpfeng.framework.data.net.util.NetError;
-import com.jpfeng.framework.util.Logger;
 
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
@@ -25,11 +24,10 @@ public class ErrorParserImpl implements ErrorParser {
     public static final int NET_ERR_NETWORK = 2;
     public static final int NET_ERR_HTTP = 3;
     public static final int NET_ERR_PARSE = 4;
-    public static final int NET_ERR_SERVER = 4;
+    public static final int NET_ERR_SERVER = 5;
 
     @Override
     public void parse(Throwable t, NetError netError) {
-        Logger.netDebug(t.getClass().getName() + ": " + t.getMessage());
         if (t instanceof UnknownHostException ||
                 t instanceof SocketTimeoutException) {
             // 连接错误

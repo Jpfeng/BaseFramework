@@ -18,6 +18,7 @@ public class NetConfig implements Serializable {
     public static final int DEFAULT_READ_TIMEOUT = 10;
     public static final int DEFAULT_WRITE_TIMEOUT = 10;
     public static final TimeUnit DEFAULT_TIME_UNIT = TimeUnit.SECONDS;
+    public static final String NET_TAG = "App/NetLog";
 
     private int mConnectTimeout;
     private int mReadTimeout;

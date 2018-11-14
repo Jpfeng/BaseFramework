@@ -27,7 +27,7 @@ class FragmentVisibleDelegate {
     private boolean mFirstCreateViewCompatReplace = true;
 
     private Handler mHandler;
-    private BaseFragment mFragment;
+    private final BaseFragment mFragment;
 
     FragmentVisibleDelegate(BaseFragment fragment) {
         this.mFragment = fragment;
@@ -110,7 +110,7 @@ class FragmentVisibleDelegate {
         if (hidden) {
             safeChangeVisibilityAndDispatch(false);
         } else {
-            enqueueDispatchVisible(true);
+            enqueueDispatchVisible();
         }
     }
 
@@ -133,14 +133,14 @@ class FragmentVisibleDelegate {
             if (!visible) {
                 return;
             }
-            enqueueDispatchVisible(true);
+            enqueueDispatchVisible();
         } else {
             changeVisibility(visible, true);
         }
     }
 
-    private void enqueueDispatchVisible(boolean needDispatch) {
-        getHandler().post(() -> changeVisibility(true, needDispatch));
+    private void enqueueDispatchVisible() {
+        getHandler().post(() -> changeVisibility(true, true));
     }
 
     private void changeVisibility(boolean visible, boolean needDispatch) {

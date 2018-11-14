@@ -19,7 +19,7 @@ public class ApplicationUtils {
      */
     public static <T> T checkNonNull(T target) {
         if (null == target) {
-            throw new RuntimeException("target is NULL!");
+            throw new NullPointerException("target is null!");
         }
         return target;
     }

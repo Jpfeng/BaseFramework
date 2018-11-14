@@ -20,11 +20,7 @@ public class ModelManager {
     /**
      * Model 的注册表
      */
-    private static Map<String, BaseModel> mModelMap;
-
-    static {
-        mModelMap = new Hashtable<>();
-    }
+    private static final Map<String, BaseModel> mModelMap = new Hashtable<>();
 
     private ModelManager() {
     }

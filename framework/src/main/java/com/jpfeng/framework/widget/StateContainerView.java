@@ -40,7 +40,7 @@ public class StateContainerView extends FrameLayout {
     /**
      * 各状态视图数组
      */
-    private View[] mStateViews;
+    private final View[] mStateViews = new View[TOTAL_STATE_COUNT];
     private int mCurrentState;
 
     public StateContainerView(@NonNull Context context) {
@@ -54,7 +54,6 @@ public class StateContainerView extends FrameLayout {
     public StateContainerView(@NonNull Context context, @Nullable AttributeSet attrs,
                               int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        mStateViews = new View[TOTAL_STATE_COUNT];
         retrieveStyledAttribute(context, attrs, defStyleAttr, R.style.defaultStateViewStyle);
     }
 
@@ -62,7 +61,6 @@ public class StateContainerView extends FrameLayout {
     public StateContainerView(@NonNull Context context, @Nullable AttributeSet attrs,
                               int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        mStateViews = new View[TOTAL_STATE_COUNT];
         retrieveStyledAttribute(context, attrs, defStyleAttr, defStyleRes);
     }
 
